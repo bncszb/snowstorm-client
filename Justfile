@@ -11,7 +11,6 @@ _:
     just --list
 
 clean:
-    rm -rf "${PWD}/{{PACKAGE_NAME}}"
     rm -rf ./*.egg-info build/ dist/ __pycache__/ .pytest_cache/
     find . -name "*.pyc" -delete
     find . -name "*.pyo" -delete
@@ -19,7 +18,7 @@ clean:
 alias gc := generate-client
 
 generate-client: clean
-    docker run --rm -v "${PWD}/{{PACKAGE_NAME}}:/local/out/python" openapitools/openapi-generator-cli generate \
+    docker run --rm -v "${PWD}:/local/out/python" openapitools/openapi-generator-cli generate \
         -i https://browser.ihtsdotools.org/snowstorm/snomed-ct/v3/api-docs/snowstorm \
         -g python \
         -o /local/out/python \
