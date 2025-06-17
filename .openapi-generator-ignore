@@ -28,3 +28,4 @@ setup.cfg
 git_push.sh
 pyproject.toml
 requirements.txt
+.gitlab-ci.yml
