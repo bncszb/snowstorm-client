@@ -21,3 +21,10 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+
+setup.py
+setup.cfg
+.travis.yml
+git_push.sh
+pyproject.toml
+requirements.txt
