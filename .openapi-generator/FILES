@@ -1,7 +1,5 @@
 .github/workflows/python.yml
 .gitignore
-.gitlab-ci.yml
-.travis.yml
 README.md
 docs/AdminApi.md
 docs/AdminPermissionsApi.md
@@ -109,10 +107,6 @@ docs/UtilityFunctionsApi.md
 docs/ValidationApi.md
 docs/VersionApi.md
 docs/WebRouteApi.md
-git_push.sh
-pyproject.toml
-requirements.txt
-setup.cfg
 snowstorm_client/__init__.py
 snowstorm_client/api/__init__.py
 snowstorm_client/api/admin_api.py

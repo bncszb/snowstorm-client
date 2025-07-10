@@ -1,0 +1,5537 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Snowstorm",
+    "description": "SNOMED CT Terminology Server REST API",
+    "contact": {
+      "name": "SNOMED International",
+      "url": "https://www.snomed.org"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "version": "10.8.2"
+  },
+  "externalDocs": {
+    "description": "See more about Snowstorm in GitHub",
+    "url": "https://github.com/IHTSDO/snowstorm"
+  },
+  "servers": [
+    {
+      "url": "https://snowstorm.snomedtools.org/snowstorm/snomed-ct",
+      "description": "Generated server url"
+    }
+  ],
+  "tags": [
+    { "name": "Refset Members", "description": "-" },
+    { "name": "Relationships", "description": "-" },
+    { "name": "Descriptions", "description": "-" },
+    { "name": "Classification", "description": "-" },
+    { "name": "Admin - Permissions", "description": "-" },
+    { "name": "Concepts", "description": "-" },
+    { "name": "MultiSearch", "description": "-" },
+    { "name": "Code Systems", "description": "-" },
+    { "name": "Import", "description": "RF2" },
+    { "name": "Web Route", "description": "-" },
+    { "name": "Identifiers", "description": "-" },
+    { "name": "MRCM", "description": "-" },
+    { "name": "Authoring Stats", "description": "-" },
+    { "name": "Utility Functions", "description": "-" },
+    { "name": "Version", "description": "Build Version" },
+    { "name": "Branching", "description": "-" },
+    { "name": "Validation", "description": "Drools" },
+    { "name": "Admin", "description": "-" },
+    { "name": "Export", "description": "RF2" }
+  ],
+  "paths": {
+    "/util/ecl-string-to-model": {
+      "post": {
+        "tags": ["Utility Functions"],
+        "summary": "Parse ECL and convert to a model representation.",
+        "description": "This utility function can be used to parse Expression Constraint Language and convert to a model representation, to support ECL builder web applications. Please note that this function does not validate any concepts or terms within the expression.",
+        "operationId": "parseECL",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "type": "string" } } },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpressionConstraint"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/util/ecl-model-to-string": {
+      "post": {
+        "tags": ["Utility Functions"],
+        "summary": "Parse ECL model representation and convert it to ECL string.",
+        "description": "This utility function can be used to convert an Expression Constraint Language JSON model representation to an ECL string, to support ECL builder web application. Please note that this function does not validate any concepts or terms within the expression.",
+        "operationId": "parseECLModel",
+        "requestBody": {
+          "content": { "application/json": { "schema": { "type": "string" } } },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/EclString" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/report/inactive-concepts-without-association": {
+      "get": {
+        "tags": ["Validation"],
+        "description": "Find inactive concepts with no historical association grouped by inactivation type.",
+        "operationId": "findInactiveConceptsWithNoHistoricalAssociationByInactivationType",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptEffectiveTime",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/InactivationTypeAndConceptIdList_Component"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/relationships": {
+      "get": {
+        "tags": ["Relationships"],
+        "operationId": "findRelationships",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "effectiveTime",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "source",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "destination",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "characteristicType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "STATED_RELATIONSHIP",
+                "INFERRED_RELATIONSHIP",
+                "ADDITIONAL_RELATIONSHIP"
+              ]
+            }
+          },
+          {
+            "name": "group",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageRelationship_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/relationships/{relationshipId}": {
+      "get": {
+        "tags": ["Relationships"],
+        "operationId": "fetchRelationship",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "relationshipId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Relationship_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/members": {
+      "get": {
+        "tags": ["Refset Members"],
+        "summary": "Search for reference set members.",
+        "operationId": "findRefsetMembers",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "referenceSet",
+            "in": "query",
+            "description": "A reference set identifier or ECL expression can be used to limit the reference sets searched. Example: <723564002",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "description": "A concept identifier or ECL expression can be used to limit the modules searched. Example: <900000000000445007",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "referencedComponentId",
+            "in": "query",
+            "description": "Set of referencedComponentId ids to limit search",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "isNullEffectiveTime",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "targetComponent",
+            "in": "query",
+            "description": "Set of target component ids to limit search",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "mapTarget",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "owlExpression.conceptId",
+            "in": "query",
+            "description": "Search by concept identifiers within an owlExpression.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "owlExpression.gci",
+            "in": "query",
+            "description": "Return axiom members with a GCI owlExpression.",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          },
+          {
+            "name": "searchAfter",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageReferenceSetMember_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/members/{uuid}": {
+      "get": {
+        "tags": ["Refset Members"],
+        "operationId": "fetchMember",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "uuid",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ReferenceSetMember_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/members/bulk/{bulkChangeId}": {
+      "get": {
+        "tags": ["Refset Members"],
+        "summary": "Fetch the status of a bulk reference set member create/update job.",
+        "operationId": "getMemberBulkChange",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "bulkChangeId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncRefsetMemberChangeBatch"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/identifiers": {
+      "get": {
+        "tags": ["Identifiers"],
+        "operationId": "findIdentifiers",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "alternateIdentifier",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "identifierSchemeId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "activeFilter",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "isNullEffectiveTime",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "referencedComponentIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          },
+          {
+            "name": "searchAfter",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language header can take the format en-x-900000000000508004 which sets the language reference set to use in the results.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageIdentifier_Component"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageIdentifier_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/identifiers/{alternateIdentifier}/referenced-concept": {
+      "get": {
+        "tags": ["Identifiers"],
+        "operationId": "findIdentifierReferencedConcept",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "alternateIdentifier",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language header can take the format en-x-900000000000508004 which sets the language reference set to use in the results.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConceptMini_Component"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConceptMini_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/descriptions": {
+      "get": {
+        "tags": ["Descriptions"],
+        "operationId": "findDescriptions",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "descriptionIds",
+            "in": "query",
+            "description": "Set of description ids to match",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "conceptId",
+            "in": "query",
+            "description": "The concept id to match",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptIds",
+            "in": "query",
+            "description": "Set of concept ids to match",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageDescription_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/descriptions/{descriptionId}": {
+      "get": {
+        "tags": ["Descriptions"],
+        "operationId": "fetchDescription",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "descriptionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Description_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/descriptions/semantictags": {
+      "get": {
+        "tags": ["Descriptions"],
+        "summary": "List semantic tags of all active concepts together with a count of concepts using each.",
+        "operationId": "countSemanticTags",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "integer",
+                    "format": "int64"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/concepts": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConcepts",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "activeFilter",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "definitionStatusFilter",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "description": "Set of module ids to filter concepts by. Defaults to any.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "term",
+            "in": "query",
+            "description": "Search term to match against concept descriptions using a case-insensitive multi-prefix matching strategy.",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "termActive",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "descriptionType",
+            "in": "query",
+            "description": "Set of description type ids to use for the term search. Defaults to any. Pick descendants of '900000000000446008 | Description type (core metadata concept) |'. Examples: 900000000000003001 (FSN), 900000000000013009 (Synonym), 900000000000550004 (Definition)",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "Set of two character language codes to match. The English language code 'en' will not be added automatically, in contrast to the Accept-Language header which always includes it. Accept-Language header still controls result FSN and PT language selection.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "preferredIn",
+            "in": "query",
+            "description": "Set of description language reference sets. The description must be preferred in at least one of these to match.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "acceptableIn",
+            "in": "query",
+            "description": "Set of description language reference sets. The description must be acceptable in at least one of these to match.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "preferredOrAcceptableIn",
+            "in": "query",
+            "description": "Set of description language reference sets. The description must be preferred OR acceptable in at least one of these to match.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "ecl",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "effectiveTime",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32" }
+          },
+          {
+            "name": "isNullEffectiveTime",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "isPublished",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "statedEcl",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "includeLeafFlag",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "form",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "inferred",
+              "enum": ["inferred", "stated", "additional"]
+            }
+          },
+          {
+            "name": "conceptIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "returnIdOnly",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          },
+          {
+            "name": "searchAfter",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Accept-Language header can take the format en-x-900000000000508004 which sets the language reference set to use in the results.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemsPageObject" }
+              },
+              "text/csv": {
+                "schema": { "$ref": "#/components/schemas/ItemsPageObject" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/concepts/{conceptId}": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConcept",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ConceptMini" }
+              },
+              "text/csv": {
+                "schema": { "$ref": "#/components/schemas/ConceptMini" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/concepts/{conceptId}/references": {
+      "get": {
+        "tags": ["Concepts"],
+        "summary": "Find concepts which reference this concept in the inferred or stated form (including stated axioms).",
+        "description": "Pagination works on the referencing concepts. A referencing concept may have one or more references of different types.",
+        "operationId": "findConceptReferences",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer", "format": "int64" }
+          },
+          {
+            "name": "stated",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 1000 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConceptReferencesResult"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/concepts/{conceptId}/normal-form": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "getConceptNormalForm",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "statedView",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "includeTerms",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExpressionStringPojo"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/concepts/{conceptId}/inbound-relationships": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConceptInboundRelationships",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InboundRelationshipsResult_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/concepts/{conceptId}/descriptions": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConceptDescriptions",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConceptDescriptionsResult_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/concepts/{conceptId}/descendants": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConceptDescendants",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "stated",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageObject_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/concepts/{conceptId}/authoring-form": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "getConceptAuthoringForm",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Expression" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/classifications": {
+      "get": {
+        "tags": ["Classification"],
+        "summary": "Retrieve classifications on a branch",
+        "operationId": "findClassifications",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageClassification"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/classifications/{classificationId}": {
+      "get": {
+        "tags": ["Classification"],
+        "summary": "Retrieve a classification on a branch",
+        "operationId": "findClassification",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "classificationId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Classification" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/classifications/{classificationId}/relationship-changes": {
+      "get": {
+        "tags": ["Classification"],
+        "summary": "Retrieve relationship changes made by a classification run on a branch",
+        "operationId": "getRelationshipChanges",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "classificationId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 1000 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageRelationshipChange"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageRelationshipChange"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/classifications/{classificationId}/equivalent-concepts": {
+      "get": {
+        "tags": ["Classification"],
+        "summary": "Retrieve equivalent concepts from a classification run on a branch",
+        "operationId": "getEquivalentConcepts",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "classificationId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 1000 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageEquivalentConceptsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/classifications/{classificationId}/concept-preview/{conceptId}": {
+      "get": {
+        "tags": ["Classification"],
+        "summary": "Retrieve a preview of a concept with classification changes applied",
+        "operationId": "getConceptPreview",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "classificationId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConceptView_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "summary": "Calculate statistics for unreleased/unversioned content to be used in daily build browser.",
+        "description": "Does not work on versioned content.",
+        "operationId": "getStats",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuthoringStatsSummary"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats/reactivated-synonyms": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "operationId": "getReactivatedSynonyms",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ConceptMicro" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats/reactivated-concepts": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "operationId": "getReactivatedConcepts",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ConceptMicro" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats/new-synonyms-on-existing-concepts": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "operationId": "getNewSynonymsOnExistingConcepts",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ConceptMicro" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats/new-descriptions": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "operationId": "getNewDescriptions",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "unpromotedChangesOnly",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/DescriptionMicro" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats/new-concepts": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "operationId": "getNewConcepts",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "unpromotedChangesOnly",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ConceptMicro" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats/module-counts": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "summary": "Get counts of various components types per module id",
+        "operationId": "getPerModuleCounts",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats/inactivated-synonyms": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "operationId": "getInactivatedSynonyms",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ConceptMicro" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats/inactivated-concepts": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "operationId": "getInactivatedConcepts",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ConceptMicro" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/{branch}/authoring-stats/changed-fully-specified-names": {
+      "get": {
+        "tags": ["Authoring Stats"],
+        "operationId": "getChangedFSNs",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ConceptMicro" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/web-route": {
+      "get": {
+        "tags": ["Web Route"],
+        "summary": "Issue 302 redirection based on locally configured web routing",
+        "description": "Swagger will attempt to follow the 302 redirection, so use developer's tools network tab to view the redirection issued.",
+        "operationId": "issueRedirect",
+        "parameters": [
+          {
+            "name": "uri",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "_format",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept",
+            "in": "header",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "*/*": { "schema": { "type": "object" } } }
+          }
+        }
+      }
+    },
+    "/version": {
+      "get": {
+        "tags": ["Version"],
+        "summary": "Software build version and timestamp.",
+        "operationId": "getBuildInformation",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BuildVersion" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/validation-maintenance/semantic-tags": {
+      "get": {
+        "tags": ["Validation"],
+        "description": "Retrieve all semantic tags.",
+        "operationId": "getSemantictTags",
+        "parameters": [
+          {
+            "name": "language",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "default": "en" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "uniqueItems": true,
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/{id}": {
+      "get": {
+        "tags": ["Branching"],
+        "operationId": "getBranchReview",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BranchReview" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/reviews/{id}/concept-changes": {
+      "get": {
+        "tags": ["Branching"],
+        "operationId": "getBranchReviewConceptChanges",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BranchReviewConceptChanges"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/multisearch/descriptions": {
+      "get": {
+        "tags": ["MultiSearch"],
+        "description": "Search descriptions across multiple Code Systems.",
+        "operationId": "findDescriptions_1",
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "ecl",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "Set of two character language codes to match. The English language code 'en' will not be added automatically, in contrast to the Accept-Language header which always includes it. Accept-Language header still controls result FSN and PT language selection.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Set of description types to include. Pick descendants of '900000000000446008 | Description type (core metadata concept) |'.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "conceptActive",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "contentScope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "ALL_PUBLISHED_CONTENT",
+              "enum": ["ALL_PUBLISHED_CONTENT"]
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageBrowserDescriptionSearchResult_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/multisearch/descriptions/referencesets": {
+      "get": {
+        "tags": ["MultiSearch"],
+        "summary": "Search descriptions across multiple Code Systems returning reference set membership bucket.",
+        "operationId": "findDescriptionsReferenceSets",
+        "parameters": [
+          {
+            "name": "term",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "array", "items": { "type": "string" } }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "Set of two character language codes to match. The English language code 'en' will not be added automatically, in contrast to the Accept-Language header which always includes it. Accept-Language header still controls result FSN and PT language selection.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Set of description types to include. Pick descendants of '900000000000446008 | Description type (core metadata concept) |'.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "conceptActive",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "contentScope",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "ALL_PUBLISHED_CONTENT",
+              "enum": ["ALL_PUBLISHED_CONTENT"]
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageBrowserDescriptionSearchResult_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/multisearch/concepts": {
+      "get": {
+        "tags": ["MultiSearch"],
+        "summary": "Search concepts across multiple Code Systems.",
+        "operationId": "findConcepts_1",
+        "parameters": [
+          {
+            "name": "conceptIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageConceptMini_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mrcm/{branch}/domain-attributes": {
+      "get": {
+        "tags": ["MRCM"],
+        "summary": "Retrieve MRCM domain attributes applicable for the given stated parents.",
+        "description": "The parentIds must be the set ids of stated parents. If creating post-coordinated expressions be sure to set the content type to POSTCOORDINATED.",
+        "operationId": "retrieveDomainAttributes",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "parentIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "proximalPrimitiveModeling",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": true }
+          },
+          {
+            "name": "contentType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "NEW_PRECOORDINATED",
+              "enum": [
+                "PRECOORDINATED",
+                "NEW_PRECOORDINATED",
+                "POSTCOORDINATED",
+                "ALL"
+              ]
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageConceptMini"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mrcm/{branch}/concept-model-attribute-hierarchy": {
+      "get": {
+        "tags": ["MRCM"],
+        "summary": "Retrieve all active concept model attributes in a hierarchical structure.",
+        "operationId": "retrieveConceptModelAttributeHierarchy",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ConceptMini" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mrcm/{branch}/attribute-values/{attributeId}": {
+      "get": {
+        "tags": ["MRCM"],
+        "summary": "Retrieve valid values for the given attribute and term prefix.",
+        "operationId": "retrieveAttributeValues",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "contentType",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "NEW_PRECOORDINATED",
+              "enum": [
+                "PRECOORDINATED",
+                "NEW_PRECOORDINATED",
+                "POSTCOORDINATED",
+                "ALL"
+              ]
+            }
+          },
+          {
+            "name": "attributeId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "termPrefix",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageConceptMini"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/merges/{mergeId}": {
+      "get": {
+        "tags": ["Branching"],
+        "operationId": "retrieveMerge",
+        "parameters": [
+          {
+            "name": "mergeId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BranchMergeJob" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/merge-reviews/{id}": {
+      "get": {
+        "tags": ["Branching"],
+        "operationId": "getMergeReview",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MergeReview" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/merge-reviews/{id}/details": {
+      "get": {
+        "tags": ["Branching"],
+        "operationId": "getMergeReviewConflictingConcepts",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MergeReviewConceptVersions"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/imports/{importId}": {
+      "get": {
+        "tags": ["Import"],
+        "summary": "Retrieve an import job.",
+        "description": "Retrieves the latest state of an import job. Used to view the import configuration and check its status.",
+        "operationId": "getImportJob",
+        "parameters": [
+          {
+            "name": "importId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ImportJob" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exports/{exportId}": {
+      "get": {
+        "tags": ["Export"],
+        "summary": "Retrieve an export job.",
+        "operationId": "getExportJob",
+        "parameters": [
+          {
+            "name": "exportId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ExportConfiguration" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/exports/{exportId}/archive": {
+      "get": {
+        "tags": ["Export"],
+        "summary": "Download the RF2 archive from an export job.",
+        "description": "NOT SUPPORTED IN SWAGGER UI. Instead open the URL in a new browser tab or make a GET request another way. This endpoint can only be called once per exportId.",
+        "operationId": "downloadRf2Archive",
+        "parameters": [
+          {
+            "name": "exportId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": { "200": { "description": "OK" } }
+      }
+    },
+    "/codesystems": {
+      "get": {
+        "tags": ["Code Systems"],
+        "summary": "List code systems",
+        "description": "List all code systems.\nforBranch is an optional parameter to find the code system which the specified branch is within.",
+        "operationId": "listCodeSystems",
+        "parameters": [
+          {
+            "name": "forBranch",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ItemsPageCodeSystem" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/codesystems/{shortName}": {
+      "get": {
+        "tags": ["Code Systems"],
+        "summary": "Retrieve a code system",
+        "operationId": "findCodeSystem",
+        "parameters": [
+          {
+            "name": "shortName",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CodeSystem" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/codesystems/{shortName}/versions": {
+      "get": {
+        "tags": ["Code Systems"],
+        "summary": "Retrieve versions of a code system",
+        "operationId": "findAllVersions",
+        "parameters": [
+          {
+            "name": "shortName",
+            "in": "path",
+            "description": "Code system short name.",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "showFutureVersions",
+            "in": "query",
+            "description": "Should versions with a future effective-time be shown.",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "showInternalReleases",
+            "in": "query",
+            "description": "Should versions marked as 'internalRelease' be shown.",
+            "required": false,
+            "schema": { "type": "boolean" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageCodeSystemVersion"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/codesystems/{shortName}/daily-build/check": {
+      "get": {
+        "tags": ["Code Systems"],
+        "summary": "Check if daily build import matches today's date.",
+        "operationId": "getLatestDailyBuild",
+        "parameters": [
+          {
+            "name": "shortName",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": { "schema": { "type": "boolean" } }
+            }
+          }
+        }
+      }
+    },
+    "/codesystems/upgrade/{jobId}": {
+      "get": {
+        "tags": ["Code Systems"],
+        "summary": "Retrieve an upgrade job.",
+        "description": "Retrieves the state of an upgrade job. Used to view the upgrade configuration and check its status.",
+        "operationId": "getUpgradeJob",
+        "parameters": [
+          {
+            "name": "jobId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CodeSystemUpgradeJob"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/members": {
+      "get": {
+        "tags": ["Refset Members"],
+        "description": "Search for reference set ids.",
+        "operationId": "findBrowserReferenceSetMembersWithAggregations",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "referenceSet",
+            "in": "query",
+            "description": "A reference set identifier or ECL expression can be used to limit the reference sets searched. Example: <723564002",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "description": "A concept identifier or ECL expression can be used to limit the modules searched. Example: <900000000000445007",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "referencedComponentId",
+            "in": "query",
+            "description": "Set of referencedComponentId ids to limit search",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 10 }
+          },
+          {
+            "name": "searchAfter",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RefSetMemberPageWithBucketAggregationsReferenceSetMember"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/descriptions": {
+      "get": {
+        "tags": ["Descriptions"],
+        "summary": "Search for concept descriptions.",
+        "description": "The Accept-Language header is used to specify the user's preferred language, 'en' is always added as a fallback if not already included in the list. Each language is used as an optional clause for matching and will include the correct character folding behaviour for that language. The Accept-Language header list is also used to chose the best translated FSN and PT values in the response.",
+        "operationId": "findBrowserDescriptions",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "term",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "active",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "module",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "Set of two character language codes to match. The English language code 'en' will not be added automatically, in contrast to the Accept-Language header which always includes it. Accept-Language header still controls result FSN and PT language selection.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Set of description type ids to use include. Defaults to any. Pick descendants of '900000000000446008 | Description type (core metadata concept) |'. Examples: 900000000000003001 (FSN), 900000000000013009 (Synonym), 900000000000550004 (Definition)",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "semanticTag",
+            "in": "query",
+            "required": false,
+            "deprecated": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "semanticTags",
+            "in": "query",
+            "description": "Set of semantic tags.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          {
+            "name": "preferredIn",
+            "in": "query",
+            "description": "Set of description language reference sets. The description must be preferred in at least one of these to match.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "acceptableIn",
+            "in": "query",
+            "description": "Set of description language reference sets. The description must be acceptable in at least one of these to match.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "preferredOrAcceptableIn",
+            "in": "query",
+            "description": "Set of description language reference sets. The description must be preferred OR acceptable in at least one of these to match.",
+            "required": false,
+            "schema": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "conceptActive",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean" }
+          },
+          {
+            "name": "conceptRefset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "groupByConcept",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "searchMode",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "STANDARD",
+              "enum": ["STANDARD", "REGEX", "WHOLE_WORD", "WILDCARD"]
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 50 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageBrowserDescriptionSearchResult_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/concepts": {
+      "get": {
+        "tags": ["Concepts"],
+        "summary": "Load concepts in the browser format.",
+        "description": "When enabled 'searchAfter' can be used for unlimited pagination. Load the first page then take the 'searchAfter' value from the response and use that as a parameter in the next page request instead of 'number'.",
+        "operationId": "getBrowserConcepts",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "number",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 100 }
+          },
+          {
+            "name": "searchAfter",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageConcept_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/concepts/{conceptId}": {
+      "get": {
+        "tags": ["Concepts"],
+        "summary": "Load a concept in the browser format.",
+        "description": "During content authoring previous versions of the concept can be loaded from version control.\nTo do this use the branch path format {branch@yyyy-MM-ddTHH:mm:ss.SSSZ} or {branch@epoch_milliseconds}.\nThe version of the concept when the branch was created can be loaded using {branch@-}.",
+        "operationId": "findBrowserConcept",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "descendantCountForm",
+            "in": "query",
+            "description": "If this parameter is set a descendantCount will be included in the response using stated/inferred as requested.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "enum": ["inferred", "stated", "additional"]
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConceptView_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/concepts/{conceptId}/parents": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConceptParents",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "form",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "inferred",
+              "enum": ["inferred", "stated", "additional"]
+            }
+          },
+          {
+            "name": "includeDescendantCount",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConceptMini_Component"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/concepts/{conceptId}/history": {
+      "get": {
+        "tags": ["Concepts"],
+        "summary": "View the history of a Concept.",
+        "description": "Response details historical changes for the given Concept.",
+        "operationId": "viewConceptHistory",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "showFutureVersions",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "showInternalReleases",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ConceptHistory" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/concepts/{conceptId}/children": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConceptChildren",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "form",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "inferred",
+              "enum": ["inferred", "stated", "additional"]
+            }
+          },
+          {
+            "name": "includeDescendantCount",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "checkDescendantsWithinRefsetId",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConceptMini_Component"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/concepts/{conceptId}/ancestors": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConceptAncestors",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "form",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "inferred",
+              "enum": ["inferred", "stated", "additional"]
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "type": "object" } }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/concepts/{componentId}/concept-or-identifier-ref-concept": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConceptOrIdentifierReferencedConcept",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "componentId",
+            "in": "path",
+            "description": "Concept id or alternative identifier.",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "identifierScheme",
+            "in": "query",
+            "description": "Identifier scheme id to combine with alternative identifier",
+            "required": false,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageObject_Component"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "$ref": "#/components/schemas/ItemsPageObject_Component"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/concepts/bulk/{bulkChangeId}": {
+      "get": {
+        "tags": ["Concepts"],
+        "summary": "Fetch the status of a bulk concept creation or update.",
+        "operationId": "getConceptBulkChange",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "bulkChangeId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AsyncConceptChangeBatch"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/browser/{branch}/concepts/ancestor-paths": {
+      "get": {
+        "tags": ["Concepts"],
+        "operationId": "findConceptAncestorPaths",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "conceptIds",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "array",
+              "items": { "type": "integer", "format": "int64" }
+            }
+          },
+          {
+            "name": "form",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "inferred",
+              "enum": ["inferred", "stated", "additional"]
+            }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "default": "en-X-900000000000509007,en-X-900000000000508004,en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ConceptMini_Component"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/branches": {
+      "get": {
+        "tags": ["Branching"],
+        "summary": "Retrieve all branches",
+        "operationId": "retrieveAllBranches",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Branch" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/branches/{branch}": {
+      "get": {
+        "tags": ["Branching"],
+        "summary": "Retrieve a single branch",
+        "operationId": "retrieveBranch",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "includeInheritedMetadata",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/BranchPojo" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/branches/{branch}/metadata": {
+      "get": {
+        "tags": ["Branching"],
+        "summary": "Retrieve a single branch metadata",
+        "operationId": "retrieveBranchMetadata",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "includeInheritedMetadata",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": { "type": "object" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/branches/{branch}/children": {
+      "get": {
+        "tags": ["Branching"],
+        "summary": "Retrieve branch descendants",
+        "operationId": "retrieveBranchDescendants",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "immediateChildren",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 0 }
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "format": "int32", "default": 100 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Branch" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/permissions": {
+      "get": {
+        "tags": ["Admin - Permissions"],
+        "summary": "Retrieve all permissions",
+        "description": "List all roles and user groups set at the global level and set against each branch.",
+        "operationId": "findAll",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionRecord_Component"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/permissions/{branch}": {
+      "get": {
+        "tags": ["Admin - Permissions"],
+        "summary": "Retrieve all permissions on given branch",
+        "description": "List roles and user groups for a specific branch.",
+        "operationId": "findForBranch",
+        "parameters": [
+          {
+            "name": "branch",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionRecord_Component"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/permissions/user-group/{userGroup}": {
+      "get": {
+        "tags": ["Admin - Permissions"],
+        "summary": "Retrieve all permissions for a provided user group",
+        "description": "List all permissions for a user group.",
+        "operationId": "findUserGroupPermissions",
+        "parameters": [
+          {
+            "name": "userGroup",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionRecord_Component"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/permissions/global": {
+      "get": {
+        "tags": ["Admin - Permissions"],
+        "summary": "Retrieve all global permissions",
+        "description": "List roles and user groups set at the global level.",
+        "operationId": "findGlobal",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PermissionRecord_Component"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/admin/cache/ecl/stats": {
+      "get": {
+        "tags": ["Admin"],
+        "operationId": "getECLCacheStats",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "integer",
+                      "format": "int64"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ExpressionConstraint": { "type": "object" },
+      "EclString": {
+        "type": "object",
+        "properties": { "eclString": { "type": "string" } }
+      },
+      "ConceptMini_Component": {
+        "type": "object",
+        "properties": {
+          "conceptId": { "type": "string" },
+          "active": { "type": "boolean" },
+          "definitionStatus": { "type": "string" },
+          "moduleId": { "type": "string" },
+          "effectiveTime": { "type": "string" },
+          "fsn": { "$ref": "#/components/schemas/TermLangPojo_Component" },
+          "pt": { "$ref": "#/components/schemas/TermLangPojo_Component" },
+          "descendantCount": { "type": "integer", "format": "int64" },
+          "isLeafInferred": { "type": "boolean" },
+          "isLeafStated": { "type": "boolean" },
+          "id": { "type": "string" },
+          "definitionStatusId": { "type": "string", "writeOnly": true },
+          "leafInferred": {
+            "$ref": "#/components/schemas/ConceptMini_Component"
+          },
+          "leafStated": {
+            "$ref": "#/components/schemas/ConceptMini_Component"
+          },
+          "extraFields": {
+            "type": "object",
+            "additionalProperties": { "type": "object" },
+            "writeOnly": true
+          },
+          "idAndFsnTerm": { "type": "string" }
+        }
+      },
+      "InactivationTypeAndConceptIdList_Component": {
+        "type": "object",
+        "properties": {
+          "inactivationIndicator": {
+            "$ref": "#/components/schemas/ConceptMini_Component"
+          },
+          "conceptIds": {
+            "type": "array",
+            "items": { "type": "integer", "format": "int64" }
+          }
+        }
+      },
+      "TermLangPojo_Component": {
+        "type": "object",
+        "properties": {
+          "term": { "type": "string" },
+          "lang": { "type": "string" }
+        }
+      },
+      "ConcreteValue_Component": {
+        "type": "object",
+        "properties": {
+          "dataType": {
+            "type": "string",
+            "enum": ["DECIMAL", "INTEGER", "STRING"]
+          },
+          "value": { "type": "string" },
+          "valueWithPrefix": { "type": "string" }
+        }
+      },
+      "ItemsPageRelationship_Component": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Relationship_Component" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "Relationship_Component": {
+        "required": ["characteristicTypeId", "modifierId", "typeId"],
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "relationshipId": { "type": "string" },
+          "sourceId": { "type": "string" },
+          "destinationId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "concreteValue": {
+            "$ref": "#/components/schemas/ConcreteValue_Component"
+          },
+          "relationshipGroup": { "type": "integer", "format": "int32" },
+          "typeId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "characteristicTypeId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "modifierId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "source": { "$ref": "#/components/schemas/ConceptMini_Component" },
+          "type": { "$ref": "#/components/schemas/ConceptMini_Component" },
+          "target": { "$ref": "#/components/schemas/ConceptMini_Component" },
+          "concrete": { "type": "boolean" },
+          "groupId": { "type": "integer", "format": "int32" },
+          "grouped": { "type": "boolean" },
+          "inferred": { "type": "boolean" },
+          "modifier": { "type": "string" },
+          "relationshipIdAsLong": { "type": "integer", "format": "int64" },
+          "characteristicType": { "type": "string" },
+          "effectiveTime": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "Coding_Component": {
+        "type": "object",
+        "properties": {
+          "system": { "type": "string" },
+          "code": { "type": "string" },
+          "display": { "type": "string" }
+        }
+      },
+      "ItemsPageReferenceSetMember_Component": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReferenceSetMember_Component"
+            }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "ReferenceSetMember_Component": {
+        "required": ["referencedComponentId", "refsetId"],
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "memberId": { "type": "string" },
+          "refsetId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "referencedComponentId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "conceptId": { "type": "string" },
+          "additionalFields": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "referencedComponentSnomedComponent": {
+            "$ref": "#/components/schemas/SnomedComponentObject_Component"
+          },
+          "mapTargetCoding": {
+            "$ref": "#/components/schemas/Coding_Component"
+          },
+          "mapGroup": { "type": "string" },
+          "mapPriority": { "type": "string" },
+          "referencedComponent": { "type": "object" },
+          "effectiveTime": { "type": "string" }
+        }
+      },
+      "SnomedComponentObject_Component": {
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "effectiveTime": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "AsyncRefsetMemberChangeBatch": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "startTime": { "type": "string", "format": "date-time" },
+          "status": {
+            "type": "string",
+            "enum": ["RUNNING", "COMPLETED", "FAILED"]
+          },
+          "memberIds": { "type": "array", "items": { "type": "string" } },
+          "endTime": { "type": "string", "format": "date-time" },
+          "message": { "type": "string" },
+          "secondsDuration": { "type": "number", "format": "float" }
+        }
+      },
+      "Identifier_Component": {
+        "required": [
+          "alternateIdentifier",
+          "identifierSchemeId",
+          "referencedComponentId"
+        ],
+        "type": "object",
+        "properties": {
+          "alternateIdentifier": { "type": "string" },
+          "effectiveTime": { "type": "string" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "identifierSchemeId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "identifierScheme": {
+            "$ref": "#/components/schemas/ConceptMini_Component"
+          },
+          "referencedComponentId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "released": { "type": "boolean" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "releaseHash": { "type": "string" },
+          "referencedComponentSnomedComponent": {
+            "$ref": "#/components/schemas/SnomedComponentObject_Component"
+          },
+          "id": { "type": "string" },
+          "referencedComponent": { "type": "object" }
+        }
+      },
+      "ItemsPageIdentifier_Component": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Identifier_Component" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "Description_Component": {
+        "required": ["caseSignificanceId", "languageCode", "term", "typeId"],
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "descriptionId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "term": { "type": "string" },
+          "termFolded": { "type": "string" },
+          "termLen": { "type": "integer", "format": "int32" },
+          "tag": { "type": "string" },
+          "conceptId": { "type": "string" },
+          "languageCode": { "maxLength": 2, "minLength": 2, "type": "string" },
+          "typeId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "caseSignificanceId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "acceptabilityMap": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "type": { "type": "string" },
+          "lang": { "type": "string" },
+          "inactivationIndicator": { "type": "string" },
+          "associationTargets": {
+            "type": "object",
+            "additionalProperties": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "languageRefsetMembers": {
+            "$ref": "#/components/schemas/Description_Component"
+          },
+          "acceptabilityMapFromLangRefsetMembers": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "caseSignificance": { "type": "string" },
+          "effectiveTime": { "type": "string" }
+        }
+      },
+      "ItemsPageDescription_Component": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Description_Component" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "ItemsPageObject": {
+        "type": "object",
+        "properties": {
+          "items": { "type": "array", "items": { "type": "object" } },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "ConceptMini": {
+        "type": "object",
+        "properties": {
+          "conceptId": { "type": "string" },
+          "active": { "type": "boolean" },
+          "definitionStatus": { "type": "string" },
+          "moduleId": { "type": "string" },
+          "effectiveTime": { "type": "string" },
+          "fsn": { "$ref": "#/components/schemas/TermLangPojo" },
+          "pt": { "$ref": "#/components/schemas/TermLangPojo" },
+          "descendantCount": { "type": "integer", "format": "int64" },
+          "isLeafInferred": { "type": "boolean" },
+          "isLeafStated": { "type": "boolean" },
+          "id": { "type": "string" },
+          "definitionStatusId": { "type": "string", "writeOnly": true },
+          "leafInferred": { "$ref": "#/components/schemas/ConceptMini" },
+          "leafStated": { "$ref": "#/components/schemas/ConceptMini" },
+          "extraFields": {
+            "type": "object",
+            "additionalProperties": { "type": "object" },
+            "writeOnly": true
+          },
+          "idAndFsnTerm": { "type": "string" }
+        }
+      },
+      "TermLangPojo": {
+        "type": "object",
+        "properties": {
+          "term": { "type": "string" },
+          "lang": { "type": "string" }
+        }
+      },
+      "ConceptReferencesResult": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "referencesByType": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/TypeReferences" }
+          }
+        }
+      },
+      "TypeReferences": {
+        "type": "object",
+        "properties": {
+          "referenceType": { "$ref": "#/components/schemas/ConceptMini" },
+          "referencingConcepts": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ConceptMini" }
+          }
+        }
+      },
+      "ExpressionStringPojo": {
+        "type": "object",
+        "properties": { "expression": { "type": "string" } }
+      },
+      "InboundRelationshipsResult_Component": {
+        "type": "object",
+        "properties": {
+          "inboundRelationships": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Relationship_Component" }
+          },
+          "total": { "type": "integer", "format": "int32" }
+        }
+      },
+      "ConceptDescriptionsResult_Component": {
+        "type": "object",
+        "properties": {
+          "conceptDescriptions": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Description_Component" }
+          }
+        }
+      },
+      "ItemsPageObject_Component": {
+        "type": "object",
+        "properties": {
+          "items": { "type": "array", "items": { "type": "object" } },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "ConceptMicro": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "primitive": { "type": "boolean" },
+          "term": { "type": "string" }
+        }
+      },
+      "ConcreteValue": {
+        "type": "object",
+        "properties": {
+          "dataType": {
+            "type": "string",
+            "enum": ["DECIMAL", "INTEGER", "STRING"]
+          },
+          "value": { "type": "string" },
+          "valueWithPrefix": { "type": "string" }
+        }
+      },
+      "Expression": {
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ExpressionAttribute" }
+          },
+          "groups": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ExpressionGroup" }
+          },
+          "concepts": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ConceptMicro" }
+          }
+        }
+      },
+      "ExpressionAttribute": {
+        "type": "object",
+        "properties": {
+          "type": { "$ref": "#/components/schemas/ConceptMicro" },
+          "target": { "$ref": "#/components/schemas/ConceptMicro" },
+          "value": { "$ref": "#/components/schemas/ConcreteValue" },
+          "concrete": { "type": "boolean" }
+        }
+      },
+      "ExpressionGroup": {
+        "type": "object",
+        "properties": {
+          "attributes": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ExpressionAttribute" }
+          }
+        }
+      },
+      "Classification": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "path": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "RUNNING",
+              "FAILED",
+              "COMPLETED",
+              "STALE",
+              "SAVING_IN_PROGRESS",
+              "SAVED",
+              "SAVE_FAILED"
+            ]
+          },
+          "errorMessage": { "type": "string" },
+          "reasonerId": { "type": "string" },
+          "userId": { "type": "string" },
+          "creationDate": { "type": "string", "format": "date-time" },
+          "completionDate": { "type": "string", "format": "date-time" },
+          "lastCommitDate": { "type": "string", "format": "date-time" },
+          "saveDate": { "type": "string", "format": "date-time" },
+          "inferredRelationshipChangesFound": { "type": "boolean" },
+          "redundantStatedRelationshipsFound": { "type": "boolean" },
+          "equivalentConceptsFound": { "type": "boolean" }
+        }
+      },
+      "ItemsPageClassification": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Classification" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "ItemsPageRelationshipChange": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/RelationshipChange" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "RelationshipChange": {
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "classificationId": { "type": "string" },
+          "relationshipId": { "type": "string" },
+          "active": { "type": "boolean" },
+          "sourceId": { "type": "string" },
+          "destinationId": { "type": "string" },
+          "value": { "type": "string" },
+          "group": { "type": "integer", "format": "int32" },
+          "typeId": { "type": "string" },
+          "modifierId": { "type": "string" },
+          "inferredNotStated": { "type": "boolean" },
+          "source": { "$ref": "#/components/schemas/ConceptMini" },
+          "destination": { "$ref": "#/components/schemas/ConceptMini" },
+          "type": { "$ref": "#/components/schemas/ConceptMini" },
+          "concrete": { "type": "boolean" },
+          "changeNature": {
+            "type": "string",
+            "enum": ["INFERRED", "REDUNDANT"]
+          },
+          "destinationOrValue": { "type": "string" },
+          "characteristicTypeId": { "type": "string" },
+          "destinationOrValueWithoutPrefix": { "type": "string" },
+          "destinationOrRawValue": { "type": "object" },
+          "sourceFsn": { "type": "string" },
+          "typeFsn": { "type": "string" },
+          "destinationFsn": { "type": "string" },
+          "unionGroup": { "type": "integer", "format": "int32" }
+        }
+      },
+      "EquivalentConceptsResponse": {
+        "type": "object",
+        "properties": {
+          "equivalentConcepts": {
+            "$ref": "#/components/schemas/ItemsPageConceptMini"
+          }
+        }
+      },
+      "ItemsPageConceptMini": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ConceptMini" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "ItemsPageEquivalentConceptsResponse": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/EquivalentConceptsResponse"
+            }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "Annotation_Component": {
+        "required": ["referencedComponentId", "refsetId"],
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "refsetId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "referencedComponentId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "conceptId": { "type": "string" },
+          "referencedComponentSnomedComponent": {
+            "$ref": "#/components/schemas/SnomedComponentObject_Component"
+          },
+          "mapTargetCoding": {
+            "$ref": "#/components/schemas/Coding_Component"
+          },
+          "annotationId": { "type": "string" },
+          "typeId": { "type": "string" },
+          "value": { "type": "string" },
+          "languageDialectCode": { "type": "string" },
+          "typePt": { "$ref": "#/components/schemas/TermLangPojo_Component" },
+          "effectiveTime": { "type": "string" },
+          "mapGroup": { "type": "string" },
+          "mapPriority": { "type": "string" },
+          "referencedComponent": { "type": "object" }
+        }
+      },
+      "Axiom_Component": {
+        "type": "object",
+        "properties": {
+          "axiomId": { "type": "string" },
+          "moduleId": { "type": "string" },
+          "active": { "type": "boolean" },
+          "released": { "type": "boolean" },
+          "definitionStatusId": { "type": "string" },
+          "relationships": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Relationship_Component" }
+          },
+          "id": { "type": "string" },
+          "definitionStatus": { "type": "string" },
+          "effectiveTime": { "type": "integer", "format": "int32" }
+        }
+      },
+      "Component_Component": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "active": { "type": "boolean" },
+          "released": { "type": "boolean" },
+          "moduleId": { "type": "string" },
+          "published": { "type": "boolean" }
+        }
+      },
+      "ConceptView_Component": {
+        "type": "object",
+        "properties": {
+          "annotations": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Annotation_Component" }
+          },
+          "active": { "type": "boolean" },
+          "conceptId": { "type": "string" },
+          "effectiveTime": { "type": "string" },
+          "pt": { "$ref": "#/components/schemas/TermLangPojo_Component" },
+          "descriptions": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Description_Component" }
+          },
+          "fsn": { "$ref": "#/components/schemas/TermLangPojo_Component" },
+          "relationships": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Relationship_Component" }
+          },
+          "definitionStatusId": { "type": "string" },
+          "moduleId": { "type": "string" },
+          "classAxioms": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Axiom_Component" }
+          },
+          "gciAxioms": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Axiom_Component" }
+          },
+          "identifiers": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Identifier_Component" }
+          },
+          "validationResults": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/InvalidContent_Component" }
+          }
+        }
+      },
+      "InvalidContent_Component": {
+        "type": "object",
+        "properties": {
+          "ruleId": { "type": "string" },
+          "conceptId": { "type": "string" },
+          "conceptFsn": { "type": "string" },
+          "component": { "$ref": "#/components/schemas/Component_Component" },
+          "message": { "type": "string" },
+          "severity": { "type": "string", "enum": ["ERROR", "WARNING"] },
+          "ignorePublishedCheck": { "type": "boolean" },
+          "published": { "type": "boolean" },
+          "componentId": { "type": "string" }
+        }
+      },
+      "AuthoringStatsSummary": {
+        "type": "object",
+        "properties": {
+          "newConceptsCount": { "type": "integer", "format": "int64" },
+          "inactivatedConceptsCount": { "type": "integer", "format": "int64" },
+          "reactivatedConceptsCount": { "type": "integer", "format": "int64" },
+          "changedFsnCount": { "type": "integer", "format": "int64" },
+          "inactivatedSynonymsCount": { "type": "integer", "format": "int64" },
+          "newSynonymsForExistingConceptsCount": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "reactivatedSynonymsCount": { "type": "integer", "format": "int64" },
+          "executionTime": { "type": "string", "format": "date-time" },
+          "title": { "type": "string" }
+        }
+      },
+      "DescriptionMicro": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "conceptId": { "type": "string" },
+          "term": { "type": "string" }
+        }
+      },
+      "BuildVersion": {
+        "type": "object",
+        "properties": {
+          "version": { "type": "string" },
+          "time": { "type": "string" }
+        }
+      },
+      "BranchReview": {
+        "required": ["id"],
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "lastUpdated": { "type": "string", "format": "date-time" },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING", "CURRENT", "STALE", "FAILED"]
+          },
+          "source": { "$ref": "#/components/schemas/BranchState" },
+          "target": { "$ref": "#/components/schemas/BranchState" },
+          "changedConcepts": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "integer", "format": "int64" }
+          },
+          "sourceParent": { "type": "boolean" }
+        }
+      },
+      "BranchState": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string" },
+          "baseTimestamp": { "type": "integer", "format": "int64" },
+          "headTimestamp": { "type": "integer", "format": "int64" }
+        }
+      },
+      "BranchReviewConceptChanges": {
+        "type": "object",
+        "properties": {
+          "changedConcepts": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "integer", "format": "int64" }
+          }
+        }
+      },
+      "BrowserDescriptionSearchResult_Component": {
+        "type": "object",
+        "properties": {
+          "term": { "type": "string" },
+          "active": { "type": "boolean" },
+          "languageCode": { "type": "string" },
+          "module": { "type": "string" },
+          "concept": { "$ref": "#/components/schemas/ConceptMini_Component" }
+        }
+      },
+      "ItemsPageBrowserDescriptionSearchResult_Component": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BrowserDescriptionSearchResult_Component"
+            }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "PageBrowserDescriptionSearchResult_Component": {
+        "type": "object",
+        "properties": {
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int32" },
+          "size": { "type": "integer", "format": "int32" },
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BrowserDescriptionSearchResult_Component"
+            }
+          },
+          "number": { "type": "integer", "format": "int32" },
+          "sort": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SortObject" }
+          },
+          "first": { "type": "boolean" },
+          "last": { "type": "boolean" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "pageable": {
+            "$ref": "#/components/schemas/PageableObject_Component"
+          },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "PageableObject_Component": {
+        "type": "object",
+        "properties": {
+          "offset": { "type": "integer", "format": "int64" },
+          "sort": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SortObject" }
+          },
+          "pageNumber": { "type": "integer", "format": "int32" },
+          "pageSize": { "type": "integer", "format": "int32" },
+          "paged": { "type": "boolean" },
+          "unpaged": { "type": "boolean" }
+        }
+      },
+      "SortObject": {
+        "type": "object",
+        "properties": {
+          "direction": { "type": "string" },
+          "nullHandling": { "type": "string" },
+          "ascending": { "type": "boolean" },
+          "property": { "type": "string" },
+          "ignoreCase": { "type": "boolean" }
+        }
+      },
+      "ItemsPageConceptMini_Component": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ConceptMini_Component" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "ApiError": {
+        "type": "object",
+        "properties": {
+          "message": { "type": "string" },
+          "developerMessage": { "type": "string" },
+          "additionalInfo": {
+            "type": "object",
+            "additionalProperties": { "type": "object" }
+          }
+        }
+      },
+      "BranchMergeJob": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "source": { "type": "string" },
+          "target": { "type": "string" },
+          "scheduledDate": { "type": "string", "format": "date-time" },
+          "startDate": { "type": "string", "format": "date-time" },
+          "status": {
+            "type": "string",
+            "enum": [
+              "SCHEDULED",
+              "IN_PROGRESS",
+              "COMPLETED",
+              "FAILED",
+              "CONFLICTS"
+            ]
+          },
+          "endDate": { "type": "string", "format": "date-time" },
+          "message": { "type": "string" },
+          "apiError": { "$ref": "#/components/schemas/ApiError" }
+        }
+      },
+      "MergeReview": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "sourcePath": { "type": "string" },
+          "targetPath": { "type": "string" },
+          "sourceToTargetReviewId": { "type": "string" },
+          "targetToSourceReviewId": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["PENDING", "CURRENT", "STALE", "FAILED"]
+          },
+          "message": { "type": "string" },
+          "created": { "type": "string", "format": "date-time" }
+        }
+      },
+      "Annotation": {
+        "required": ["referencedComponentId", "refsetId"],
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "memberId": { "type": "string" },
+          "refsetId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "referencedComponentId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "conceptId": { "type": "string" },
+          "additionalFields": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "referencedComponentSnomedComponent": {
+            "$ref": "#/components/schemas/SnomedComponentObject"
+          },
+          "mapTargetCoding": { "$ref": "#/components/schemas/Coding" },
+          "annotationId": { "type": "string" },
+          "typeId": { "type": "string" },
+          "value": { "type": "string" },
+          "languageDialectCode": { "type": "string" },
+          "typePt": { "$ref": "#/components/schemas/TermLangPojo" },
+          "effectiveTime": { "type": "string" },
+          "mapGroup": { "type": "string" },
+          "mapPriority": { "type": "string" },
+          "referencedComponent": { "type": "object" }
+        }
+      },
+      "Axiom": {
+        "type": "object",
+        "properties": {
+          "axiomId": { "type": "string" },
+          "moduleId": { "type": "string" },
+          "active": { "type": "boolean" },
+          "released": { "type": "boolean" },
+          "definitionStatusId": { "type": "string" },
+          "relationships": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Relationship" }
+          },
+          "id": { "type": "string" },
+          "definitionStatus": { "type": "string" },
+          "effectiveTime": { "type": "integer", "format": "int32" }
+        }
+      },
+      "Coding": {
+        "type": "object",
+        "properties": {
+          "system": { "type": "string" },
+          "code": { "type": "string" },
+          "display": { "type": "string" }
+        }
+      },
+      "Component": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "active": { "type": "boolean" },
+          "released": { "type": "boolean" },
+          "moduleId": { "type": "string" },
+          "published": { "type": "boolean" }
+        }
+      },
+      "Concept": {
+        "required": ["definitionStatusId"],
+        "type": "object",
+        "properties": {
+          "conceptId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "descendantCount": { "type": "integer", "format": "int64" },
+          "fsn": { "$ref": "#/components/schemas/TermLangPojo" },
+          "pt": { "$ref": "#/components/schemas/TermLangPojo" },
+          "active": { "type": "boolean" },
+          "effectiveTime": { "type": "string" },
+          "released": { "type": "boolean" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "inactivationIndicator": { "type": "string" },
+          "associationTargets": {
+            "type": "object",
+            "additionalProperties": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "definitionStatus": { "type": "string" },
+          "definitionStatusId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "descriptions": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Description" }
+          },
+          "annotations": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Annotation" }
+          },
+          "classAxioms": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Axiom" }
+          },
+          "gciAxioms": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Axiom" }
+          },
+          "relationships": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Relationship" }
+          },
+          "alternateIdentifiers": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Identifier" }
+          },
+          "validationResults": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/InvalidContent" }
+          },
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "releaseHash": { "type": "string" },
+          "primitive": { "type": "boolean" },
+          "activeDescriptions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Description" }
+          },
+          "allOwlAxiomMembers": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ReferenceSetMember" }
+          },
+          "allAnnotationMembers": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ReferenceSetMember" }
+          },
+          "activeInferredRelationships": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Relationship" }
+          }
+        }
+      },
+      "Description": {
+        "required": ["caseSignificanceId", "languageCode", "term", "typeId"],
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "descriptionId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "term": { "type": "string" },
+          "termFolded": { "type": "string" },
+          "termLen": { "type": "integer", "format": "int32" },
+          "tag": { "type": "string" },
+          "conceptId": { "type": "string" },
+          "languageCode": { "maxLength": 2, "minLength": 2, "type": "string" },
+          "typeId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "caseSignificanceId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "acceptabilityMap": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "type": { "type": "string" },
+          "lang": { "type": "string" },
+          "inactivationIndicator": { "type": "string" },
+          "associationTargets": {
+            "type": "object",
+            "additionalProperties": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "languageRefsetMembers": {
+            "$ref": "#/components/schemas/Description"
+          },
+          "acceptabilityMapFromLangRefsetMembers": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "caseSignificance": { "type": "string" },
+          "effectiveTime": { "type": "string" }
+        }
+      },
+      "Identifier": {
+        "required": [
+          "alternateIdentifier",
+          "identifierSchemeId",
+          "referencedComponentId"
+        ],
+        "type": "object",
+        "properties": {
+          "alternateIdentifier": { "type": "string" },
+          "effectiveTime": { "type": "string" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "identifierSchemeId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "identifierScheme": { "$ref": "#/components/schemas/ConceptMini" },
+          "referencedComponentId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "released": { "type": "boolean" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "releaseHash": { "type": "string" },
+          "referencedComponentSnomedComponent": {
+            "$ref": "#/components/schemas/SnomedComponentObject"
+          },
+          "id": { "type": "string" },
+          "referencedComponent": { "type": "object" }
+        }
+      },
+      "InvalidContent": {
+        "type": "object",
+        "properties": {
+          "ruleId": { "type": "string" },
+          "conceptId": { "type": "string" },
+          "conceptFsn": { "type": "string" },
+          "component": { "$ref": "#/components/schemas/Component" },
+          "message": { "type": "string" },
+          "severity": { "type": "string", "enum": ["ERROR", "WARNING"] },
+          "ignorePublishedCheck": { "type": "boolean" },
+          "published": { "type": "boolean" },
+          "componentId": { "type": "string" }
+        }
+      },
+      "MergeReviewConceptVersions": {
+        "type": "object",
+        "properties": {
+          "sourceConcept": { "$ref": "#/components/schemas/Concept" },
+          "targetConcept": { "$ref": "#/components/schemas/Concept" },
+          "autoMergedConcept": { "$ref": "#/components/schemas/Concept" },
+          "manuallyMergedConcept": { "$ref": "#/components/schemas/Concept" },
+          "targetConceptVersionBehind": { "type": "boolean" }
+        }
+      },
+      "ReferenceSetMember": {
+        "required": ["referencedComponentId", "refsetId"],
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "memberId": { "type": "string" },
+          "refsetId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "referencedComponentId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "conceptId": { "type": "string" },
+          "additionalFields": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "referencedComponentSnomedComponent": {
+            "$ref": "#/components/schemas/SnomedComponentObject"
+          },
+          "mapTargetCoding": { "$ref": "#/components/schemas/Coding" },
+          "mapGroup": { "type": "string" },
+          "mapPriority": { "type": "string" },
+          "referencedComponent": { "type": "object" },
+          "effectiveTime": { "type": "string" }
+        }
+      },
+      "Relationship": {
+        "required": ["characteristicTypeId", "modifierId", "typeId"],
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "relationshipId": { "type": "string" },
+          "sourceId": { "type": "string" },
+          "destinationId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "concreteValue": { "$ref": "#/components/schemas/ConcreteValue" },
+          "relationshipGroup": { "type": "integer", "format": "int32" },
+          "typeId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "characteristicTypeId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "modifierId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "source": { "$ref": "#/components/schemas/ConceptMini" },
+          "type": { "$ref": "#/components/schemas/ConceptMini" },
+          "target": { "$ref": "#/components/schemas/ConceptMini" },
+          "concrete": { "type": "boolean" },
+          "groupId": { "type": "integer", "format": "int32" },
+          "grouped": { "type": "boolean" },
+          "inferred": { "type": "boolean" },
+          "modifier": { "type": "string" },
+          "relationshipIdAsLong": { "type": "integer", "format": "int64" },
+          "characteristicType": { "type": "string" },
+          "effectiveTime": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "SnomedComponentObject": {
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "active": { "type": "boolean" },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "released": { "type": "boolean" },
+          "releaseHash": { "type": "string" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "effectiveTime": { "type": "string" },
+          "id": { "type": "string" }
+        }
+      },
+      "ImportJob": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "enum": ["WAITING_FOR_FILE", "RUNNING", "COMPLETED", "FAILED"]
+          },
+          "errorMessage": { "type": "string" },
+          "type": { "type": "string", "enum": ["DELTA", "SNAPSHOT", "FULL"] },
+          "branchPath": { "type": "string" },
+          "createCodeSystemVersion": { "type": "boolean" },
+          "patchReleaseVersion": { "type": "integer", "format": "int32" },
+          "moduleIds": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "internalRelease": { "type": "boolean" }
+        }
+      },
+      "ExportConfiguration": {
+        "required": ["branchPath", "type"],
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "startDate": { "type": "string", "format": "date-time" },
+          "branchPath": { "type": "string" },
+          "type": {
+            "type": "string",
+            "default": "DELTA",
+            "enum": ["DELTA", "SNAPSHOT", "FULL"]
+          },
+          "filenameEffectiveDate": { "pattern": "[0-9]{8}", "type": "string" },
+          "conceptsAndRelationshipsOnly": {
+            "type": "boolean",
+            "default": false
+          },
+          "unpromotedChangesOnly": { "type": "boolean", "default": false },
+          "legacyZipNaming": { "type": "boolean", "default": false },
+          "transientEffectiveTime": {
+            "pattern": "[0-9]{8}",
+            "type": "string",
+            "description": "Format: yyyymmdd. Add a transient effectiveTime to rows of content which are not yet versioned."
+          },
+          "startEffectiveTime": {
+            "pattern": "[0-9]{8}",
+            "type": "string",
+            "description": "Format: yyyymmdd. Can be used to produce a delta after content is versioned by filtering a SNAPSHOT export by effectiveTime."
+          },
+          "moduleIds": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "refsetIds": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "If refsetIds are included, this indicates that the export will be a refset-only export.",
+            "items": {
+              "type": "string",
+              "description": "If refsetIds are included, this indicates that the export will be a refset-only export."
+            }
+          },
+          "status": {
+            "type": "string",
+            "default": "PENDING",
+            "enum": ["PENDING", "RUNNING", "COMPLETED", "DOWNLOADED", "FAILED"]
+          },
+          "exportFilePath": { "type": "string" },
+          "startExport": { "type": "boolean", "default": false }
+        }
+      },
+      "CodeSystem": {
+        "required": ["branchPath", "shortName"],
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "owner": { "type": "string" },
+          "shortName": { "type": "string" },
+          "branchPath": { "pattern": "MAIN.*", "type": "string" },
+          "dependantVersionEffectiveTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "dailyBuildAvailable": { "type": "boolean" },
+          "latestDailyBuild": { "type": "string" },
+          "countryCode": { "type": "string" },
+          "defaultLanguageCode": { "type": "string" },
+          "defaultLanguageReferenceSets": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "maintainerType": { "type": "string" },
+          "latestVersion": { "$ref": "#/components/schemas/CodeSystemVersion" },
+          "languages": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "modules": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ConceptMini" }
+          },
+          "userRoles": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      },
+      "CodeSystemVersion": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "shortName": { "type": "string" },
+          "importDate": { "type": "string", "format": "date-time" },
+          "parentBranchPath": { "type": "string" },
+          "effectiveDate": { "type": "integer", "format": "int32" },
+          "version": { "type": "string" },
+          "description": { "type": "string" },
+          "releasePackage": { "type": "string" },
+          "dependantVersionEffectiveTime": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "codeSystem": { "$ref": "#/components/schemas/CodeSystem" },
+          "branchPath": { "type": "string" }
+        }
+      },
+      "ItemsPageCodeSystem": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CodeSystem" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "ItemsPageCodeSystemVersion": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/CodeSystemVersion" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "CodeSystemUpgradeJob": {
+        "type": "object",
+        "properties": {
+          "newDependantVersion": { "type": "integer", "format": "int32" },
+          "codeSystemShortname": { "type": "string" },
+          "status": {
+            "type": "string",
+            "enum": ["RUNNING", "COMPLETED", "FAILED"]
+          },
+          "errorMessage": { "type": "string" },
+          "creationTimestamp": { "type": "integer", "format": "int64" }
+        }
+      },
+      "PageableObject": {
+        "type": "object",
+        "properties": {
+          "offset": { "type": "integer", "format": "int64" },
+          "sort": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SortObject" }
+          },
+          "pageNumber": { "type": "integer", "format": "int32" },
+          "pageSize": { "type": "integer", "format": "int32" },
+          "paged": { "type": "boolean" },
+          "unpaged": { "type": "boolean" }
+        }
+      },
+      "RefSetMemberPageWithBucketAggregationsReferenceSetMember": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ReferenceSetMember" }
+          },
+          "pageable": { "$ref": "#/components/schemas/PageableObject" },
+          "memberCountsByReferenceSet": {
+            "type": "object",
+            "additionalProperties": { "type": "integer", "format": "int64" }
+          },
+          "referenceSets": {
+            "type": "object",
+            "additionalProperties": {
+              "$ref": "#/components/schemas/ConceptMini"
+            }
+          },
+          "searchAfterArray": {
+            "type": "array",
+            "items": { "type": "object" }
+          },
+          "searchAfter": { "type": "string" },
+          "last": { "type": "boolean" },
+          "totalElements": { "type": "integer", "format": "int64" },
+          "totalPages": { "type": "integer", "format": "int32" },
+          "size": { "type": "integer", "format": "int32" },
+          "number": { "type": "integer", "format": "int32" },
+          "sort": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SortObject" }
+          },
+          "first": { "type": "boolean" },
+          "numberOfElements": { "type": "integer", "format": "int32" },
+          "empty": { "type": "boolean" }
+        }
+      },
+      "Concept_Component": {
+        "required": ["definitionStatusId"],
+        "type": "object",
+        "properties": {
+          "conceptId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "descendantCount": { "type": "integer", "format": "int64" },
+          "fsn": { "$ref": "#/components/schemas/TermLangPojo_Component" },
+          "pt": { "$ref": "#/components/schemas/TermLangPojo_Component" },
+          "active": { "type": "boolean" },
+          "effectiveTime": { "type": "string" },
+          "released": { "type": "boolean" },
+          "releasedEffectiveTime": { "type": "integer", "format": "int32" },
+          "inactivationIndicator": { "type": "string" },
+          "associationTargets": {
+            "type": "object",
+            "additionalProperties": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "moduleId": { "maxLength": 18, "minLength": 5, "type": "string" },
+          "definitionStatus": { "type": "string" },
+          "definitionStatusId": {
+            "maxLength": 18,
+            "minLength": 5,
+            "type": "string"
+          },
+          "descriptions": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Description_Component" }
+          },
+          "annotations": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Annotation_Component" }
+          },
+          "classAxioms": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Axiom_Component" }
+          },
+          "gciAxioms": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Axiom_Component" }
+          },
+          "relationships": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Relationship_Component" }
+          },
+          "alternateIdentifiers": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Identifier_Component" }
+          },
+          "validationResults": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/InvalidContent_Component" }
+          },
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "changed": { "type": "boolean" },
+          "effectiveTimeI": { "type": "integer", "format": "int32" },
+          "releaseHash": { "type": "string" },
+          "primitive": { "type": "boolean" },
+          "activeDescriptions": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Description_Component" }
+          },
+          "allOwlAxiomMembers": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReferenceSetMember_Component"
+            }
+          },
+          "allAnnotationMembers": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ReferenceSetMember_Component"
+            }
+          },
+          "activeInferredRelationships": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Relationship_Component" }
+          }
+        }
+      },
+      "ItemsPageConcept_Component": {
+        "type": "object",
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Concept_Component" }
+          },
+          "total": { "type": "integer", "format": "int64" },
+          "limit": { "type": "integer", "format": "int64" },
+          "offset": { "type": "integer", "format": "int64" },
+          "searchAfter": { "type": "string" },
+          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+        }
+      },
+      "ConceptHistory": {
+        "type": "object",
+        "properties": {
+          "conceptId": { "type": "string" },
+          "history": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ConceptHistoryItem" }
+          }
+        }
+      },
+      "ConceptHistoryItem": {
+        "type": "object",
+        "properties": {
+          "effectiveTime": { "type": "string" },
+          "branch": { "type": "string" },
+          "componentTypes": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": ["Concept", "Description", "Relationship", "Axiom"]
+            }
+          }
+        }
+      },
+      "AsyncConceptChangeBatch": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "startTime": { "type": "string", "format": "date-time" },
+          "status": {
+            "type": "string",
+            "enum": ["RUNNING", "COMPLETED", "FAILED"]
+          },
+          "conceptIds": {
+            "type": "array",
+            "items": { "type": "integer", "format": "int64" }
+          },
+          "endTime": { "type": "string", "format": "date-time" },
+          "message": { "type": "string" },
+          "secondsDuration": { "type": "number", "format": "float" }
+        }
+      },
+      "Branch": {
+        "type": "object",
+        "properties": {
+          "internalId": { "type": "string" },
+          "path": { "type": "string" },
+          "start": { "type": "string", "format": "date-time" },
+          "end": { "type": "string", "format": "date-time" },
+          "deleted": { "type": "boolean" },
+          "base": { "type": "string", "format": "date-time" },
+          "head": { "type": "string", "format": "date-time" },
+          "creation": { "type": "string", "format": "date-time" },
+          "lastPromotion": { "type": "string", "format": "date-time" },
+          "locked": { "type": "boolean" },
+          "containsContent": { "type": "boolean" },
+          "versionsReplaced": {
+            "type": "object",
+            "additionalProperties": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          },
+          "metadataInternal": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          },
+          "metadata": { "$ref": "#/components/schemas/Metadata" },
+          "state": {
+            "type": "string",
+            "enum": ["UP_TO_DATE", "FORWARD", "BEHIND", "DIVERGED"]
+          },
+          "headTimestamp": { "type": "integer", "format": "int64" },
+          "baseTimestamp": { "type": "integer", "format": "int64" },
+          "creationTimestamp": { "type": "integer", "format": "int64" },
+          "versionsReplacedCounts": {
+            "type": "object",
+            "additionalProperties": { "type": "integer", "format": "int32" }
+          }
+        }
+      },
+      "Metadata": {
+        "type": "object",
+        "properties": {
+          "asMap": {
+            "type": "object",
+            "additionalProperties": { "type": "object" }
+          }
+        }
+      },
+      "BranchPojo": {
+        "type": "object",
+        "properties": {
+          "path": { "type": "string" },
+          "state": {
+            "type": "string",
+            "enum": ["UP_TO_DATE", "FORWARD", "BEHIND", "DIVERGED"]
+          },
+          "containsContent": { "type": "boolean" },
+          "locked": { "type": "boolean" },
+          "creation": { "type": "string", "format": "date-time" },
+          "base": { "type": "string", "format": "date-time" },
+          "head": { "type": "string", "format": "date-time" },
+          "creationTimestamp": { "type": "integer", "format": "int64" },
+          "baseTimestamp": { "type": "integer", "format": "int64" },
+          "headTimestamp": { "type": "integer", "format": "int64" },
+          "userRoles": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "globalUserRoles": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "versionsReplacedCounts": {
+            "type": "object",
+            "additionalProperties": { "type": "integer", "format": "int32" }
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": { "type": "object" }
+          },
+          "versionsReplaced": {
+            "type": "object",
+            "additionalProperties": {
+              "uniqueItems": true,
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      },
+      "PermissionRecord_Component": {
+        "type": "object",
+        "properties": {
+          "role": { "type": "string" },
+          "path": { "type": "string" },
+          "global": { "type": "boolean" },
+          "userGroups": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    }
+  }
+}

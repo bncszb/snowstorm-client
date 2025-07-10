@@ -1,6 +1,6 @@
 # snowstorm_client.RelationshipsApi
 
-All URIs are relative to *https://browser.ihtsdotools.org/snowstorm/snomed-ct*
+All URIs are relative to *https://snowstorm.snomedtools.org/snowstorm/snomed-ct*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -20,10 +20,10 @@ from snowstorm_client.models.relationship_component import RelationshipComponent
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -87,10 +87,10 @@ from snowstorm_client.models.items_page_relationship_component import ItemsPageR
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 

@@ -19,7 +19,7 @@ alias gc := generate-client
 
 generate-client: clean
     docker run --rm -v "${PWD}:/local/out/python" openapitools/openapi-generator-cli generate \
-        -i https://browser.ihtsdotools.org/snowstorm/snomed-ct/v3/api-docs/snowstorm \
+        -i /local/out/python/api-docs.json \
         -g python \
         -o /local/out/python \
         --package-name {{PACKAGE_NAME}} \
@@ -40,3 +40,6 @@ build: generate-client
 alias c := clean
 alias i := install-dev
 alias b := build
+
+test:
+    uv run -m pytest .

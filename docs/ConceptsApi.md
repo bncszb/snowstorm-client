@@ -1,6 +1,6 @@
 # snowstorm_client.ConceptsApi
 
-All URIs are relative to *https://browser.ihtsdotools.org/snowstorm/snomed-ct*
+All URIs are relative to *https://snowstorm.snomedtools.org/snowstorm/snomed-ct*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -41,10 +41,10 @@ from snowstorm_client.models.concept_view_component import ConceptViewComponent
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -111,10 +111,10 @@ from snowstorm_client.models.concept_mini import ConceptMini
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -178,10 +178,10 @@ from snowstorm_client.models.concept_mini_component import ConceptMiniComponent
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -246,10 +246,10 @@ import snowstorm_client
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -315,10 +315,10 @@ from snowstorm_client.models.concept_mini_component import ConceptMiniComponent
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -388,10 +388,10 @@ from snowstorm_client.models.items_page_object_component import ItemsPageObjectC
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -461,10 +461,10 @@ from snowstorm_client.models.concept_descriptions_result_component import Concep
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -528,10 +528,10 @@ from snowstorm_client.models.inbound_relationships_result_component import Inbou
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -593,10 +593,10 @@ from snowstorm_client.models.items_page_object_component import ItemsPageObjectC
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -662,10 +662,10 @@ from snowstorm_client.models.concept_mini_component import ConceptMiniComponent
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -737,10 +737,10 @@ from snowstorm_client.models.concept_references_result import ConceptReferencesR
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -811,10 +811,10 @@ from snowstorm_client.models.items_page_object import ItemsPageObject
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -924,10 +924,10 @@ from snowstorm_client.models.items_page_concept_component import ItemsPageConcep
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -998,10 +998,10 @@ from snowstorm_client.models.expression import Expression
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -1067,10 +1067,10 @@ from snowstorm_client.models.async_concept_change_batch import AsyncConceptChang
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -1133,10 +1133,10 @@ from snowstorm_client.models.expression_string_pojo import ExpressionStringPojo
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
@@ -1208,10 +1208,10 @@ from snowstorm_client.models.concept_history import ConceptHistory
 from snowstorm_client.rest import ApiException
 from pprint import pprint
 
-# Defining the host is optional and defaults to https://browser.ihtsdotools.org/snowstorm/snomed-ct
+# Defining the host is optional and defaults to https://snowstorm.snomedtools.org/snowstorm/snomed-ct
 # See configuration.py for a list of all supported configuration parameters.
 configuration = snowstorm_client.Configuration(
-    host = "https://browser.ihtsdotools.org/snowstorm/snomed-ct"
+    host = "https://snowstorm.snomedtools.org/snowstorm/snomed-ct"
 )
 
 
