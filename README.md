@@ -231,6 +231,7 @@ Class | Method | HTTP request | Description
  - [ItemsPageIdentifierComponent](docs/ItemsPageIdentifierComponent.md)
  - [ItemsPageObject](docs/ItemsPageObject.md)
  - [ItemsPageObjectComponent](docs/ItemsPageObjectComponent.md)
+ - [ItemsPageObjectItems](docs/ItemsPageObjectItems.md)
  - [ItemsPageReferenceSetMemberComponent](docs/ItemsPageReferenceSetMemberComponent.md)
  - [ItemsPageRelationshipChange](docs/ItemsPageRelationshipChange.md)
  - [ItemsPageRelationshipComponent](docs/ItemsPageRelationshipComponent.md)

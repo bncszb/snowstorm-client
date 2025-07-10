@@ -77,6 +77,7 @@ docs/ItemsPageEquivalentConceptsResponse.md
 docs/ItemsPageIdentifierComponent.md
 docs/ItemsPageObject.md
 docs/ItemsPageObjectComponent.md
+docs/ItemsPageObjectItems.md
 docs/ItemsPageReferenceSetMemberComponent.md
 docs/ItemsPageRelationshipChange.md
 docs/ItemsPageRelationshipComponent.md
@@ -198,6 +199,7 @@ snowstorm_client/models/items_page_equivalent_concepts_response.py
 snowstorm_client/models/items_page_identifier_component.py
 snowstorm_client/models/items_page_object.py
 snowstorm_client/models/items_page_object_component.py
+snowstorm_client/models/items_page_object_items.py
 snowstorm_client/models/items_page_reference_set_member_component.py
 snowstorm_client/models/items_page_relationship_change.py
 snowstorm_client/models/items_page_relationship_component.py

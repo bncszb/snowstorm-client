@@ -5,12 +5,12 @@
 
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**items** | **List[object]** |  | [optional] 
+**items** | [**ItemsPageObjectItems**](ItemsPageObjectItems.md) |  | [optional] 
 **total** | **int** |  | [optional] 
 **limit** | **int** |  | [optional] 
 **offset** | **int** |  | [optional] 
 **search_after** | **str** |  | [optional] 
-**search_after_array** | **List[object]** |  | [optional] 
+**search_after_array** | [**ItemsPageObjectItems**](ItemsPageObjectItems.md) |  | [optional] 
 
 ## Example
 

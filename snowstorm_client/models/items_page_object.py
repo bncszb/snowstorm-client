@@ -19,6 +19,7 @@ import json
 
 from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
+from snowstorm_client.models.items_page_object_items import ItemsPageObjectItems
 from typing import Optional, Set
 from typing_extensions import Self
 
@@ -26,12 +27,12 @@ class ItemsPageObject(BaseModel):
     """
     ItemsPageObject
     """ # noqa: E501
-    items: Optional[List[Dict[str, Any]]] = None
+    items: Optional[ItemsPageObjectItems] = None
     total: Optional[StrictInt] = None
     limit: Optional[StrictInt] = None
     offset: Optional[StrictInt] = None
     search_after: Optional[StrictStr] = Field(default=None, alias="searchAfter")
-    search_after_array: Optional[List[Dict[str, Any]]] = Field(default=None, alias="searchAfterArray")
+    search_after_array: Optional[ItemsPageObjectItems] = Field(default=None, alias="searchAfterArray")
     __properties: ClassVar[List[str]] = ["items", "total", "limit", "offset", "searchAfter", "searchAfterArray"]
 
     model_config = ConfigDict(
@@ -73,6 +74,12 @@ class ItemsPageObject(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of items
+        if self.items:
+            _dict['items'] = self.items.to_dict()
+        # override the default output from pydantic by calling `to_dict()` of search_after_array
+        if self.search_after_array:
+            _dict['searchAfterArray'] = self.search_after_array.to_dict()
         return _dict
 
     @classmethod
@@ -85,12 +92,12 @@ class ItemsPageObject(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "items": obj.get("items"),
+            "items": ItemsPageObjectItems.from_dict(obj["items"]) if obj.get("items") is not None else None,
             "total": obj.get("total"),
             "limit": obj.get("limit"),
             "offset": obj.get("offset"),
             "searchAfter": obj.get("searchAfter"),
-            "searchAfterArray": obj.get("searchAfterArray")
+            "searchAfterArray": ItemsPageObjectItems.from_dict(obj["searchAfterArray"]) if obj.get("searchAfterArray") is not None else None
         })
         return _obj
 

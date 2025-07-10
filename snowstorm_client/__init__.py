@@ -111,6 +111,7 @@ __all__ = [
     "ItemsPageIdentifierComponent",
     "ItemsPageObject",
     "ItemsPageObjectComponent",
+    "ItemsPageObjectItems",
     "ItemsPageReferenceSetMemberComponent",
     "ItemsPageRelationshipChange",
     "ItemsPageRelationshipComponent",
@@ -233,6 +234,7 @@ from snowstorm_client.models.items_page_equivalent_concepts_response import Item
 from snowstorm_client.models.items_page_identifier_component import ItemsPageIdentifierComponent as ItemsPageIdentifierComponent
 from snowstorm_client.models.items_page_object import ItemsPageObject as ItemsPageObject
 from snowstorm_client.models.items_page_object_component import ItemsPageObjectComponent as ItemsPageObjectComponent
+from snowstorm_client.models.items_page_object_items import ItemsPageObjectItems as ItemsPageObjectItems
 from snowstorm_client.models.items_page_reference_set_member_component import ItemsPageReferenceSetMemberComponent as ItemsPageReferenceSetMemberComponent
 from snowstorm_client.models.items_page_relationship_change import ItemsPageRelationshipChange as ItemsPageRelationshipChange
 from snowstorm_client.models.items_page_relationship_component import ItemsPageRelationshipComponent as ItemsPageRelationshipComponent

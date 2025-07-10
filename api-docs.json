@@ -4044,12 +4044,22 @@
       "ItemsPageObject": {
         "type": "object",
         "properties": {
-          "items": { "type": "array", "items": { "type": "object" } },
+          "items": {
+            "oneOf": [
+              { "type": "array", "items": { "type": "object" } },
+              { "type": "array", "items": { "type": "integer" } }
+            ]
+          },
           "total": { "type": "integer", "format": "int64" },
           "limit": { "type": "integer", "format": "int64" },
           "offset": { "type": "integer", "format": "int64" },
           "searchAfter": { "type": "string" },
-          "searchAfterArray": { "type": "array", "items": { "type": "object" } }
+          "searchAfterArray": {
+            "oneOf": [
+              { "type": "array", "items": { "type": "object" } },
+              { "type": "array", "items": { "type": "integer" } }
+            ]
+          }
         }
       },
       "ConceptMini": {
